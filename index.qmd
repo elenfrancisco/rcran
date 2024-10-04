@@ -2,25 +2,42 @@
 title: "Clases de R"
 author: "Elen Francisco Guevara"
 format: html
+editor_options: 
+  chunk_output_type: console
 ---
-
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
+library(agricolae)
 ```
 
-You can add options to executable code like this 
+#Diseños experimentales
+## Diseño DCA
+Dosis de fertilizacion nitrogenada:
+- 0
+- 50
+- 100
+- 150
 
+Rep: 5
 ```{r}
-#| echo: false
-2 * 2
+# Definir las dosis de fertilización
+dosis <- c(1, 2,3, 4)  # Dosis de N en kg/ha
+n_repeticiones <- 5          # Número de repeticiones
+
+# Crear el diseño DCA
+set.seed(123)  # Para reproducibilidad
+diseño <- design.crd(trt=dosis, r=n_repeticiones)
+
+# Mostrar el diseño
+print(diseño)
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+## DBCA
+Factor => variedades de papa: canchan y peruanita
+# Analisis de datos
+```{r}
+factor_2 <- c(1, 2)
+# Crear un data frame con todas las combinaciones
+trt <- c(4,2)
+diseño <- design.ab(trt, 5, serie = 2, design= "rcbd", seed = 0, kinds = "Super-Duper", first=TRUE, randomization=TRUE)
+print(diseño)
+```
