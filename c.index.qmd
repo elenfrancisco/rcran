@@ -1,0 +1,77 @@
+---
+title: "potato"
+author: "Francisco-Guevara"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this 
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+#Analisis de datos
+
+```{r cargar datos}
+library(tidyverse)
+#library(googlesheets4)
+library(readxl)
+fb <- read_excel("D:/a Doctorado/Diseños estadísticos/LA MOLINA 2014 POTATO WUE (FB).xlsx", 
+    sheet = "fb")
+View(fb)
+str(fb)
+```
+## Modelo estadístico
+
+```{r}
+modelo <- aov(formula=lfa ~ riego + geno + riego*geno +bloque, data = fb)
+plot(modelo)
+anova(modelo)
+
+```
+
+##Comparación de medias
+```{r}
+library(agricolae)
+mc <- duncan.test(y = modelo, trt = c("riego", "geno"))
+mc
+str(mc)
+
+
+```
+#Grafico
+```{r}
+library(emmeans)
+library(multcomp)
+mc <- emmeans(modelo, ~ riego|geno) %>%
+  cld(Letters = letters, reversed = T)
+
+library(inti)
+plot_smr(data = mc
+         , type = "bar"
+         , x = "geno"
+         , y = "emmean"
+         , group = "riego"
+         , sig = ".group"
+         , error = "SE"
+         , ylimits = c(0, 12000, 20000)
+         )
+
+
+```
